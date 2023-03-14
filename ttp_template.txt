@@ -1,0 +1,15 @@
+<group name="vlans" containsall="id">
+vlan {{ id | DIGIT | _start_ }}
+  vn-segment {{ vni | DIGIT }}
+</group>
+
+<group name="interface_vlan" containsall="id">
+interface Vlan{{ id | DIGIT | _start_ }}
+  vrf member {{ vrf }}
+</group>
+
+<group name="nve" containsall="vni">
+  member vni {{ vni | DIGIT | _start_ }}
+  member vni {{ vni | DIGIT | _start_ }} {{ l3 | WORD | | replaceall("true", "associate-vrf")}}
+    mcast-group {{ mcast_group }}
+</group>
