@@ -2,8 +2,8 @@ import json
 from ttp import ttp
 import sys, os
 
-#folder = sys.argv[1]
-folder = "running_20221006"
+folder = sys.argv[1]
+#folder = "running_20221006"
 filetmp = "ttp_template.txt"
 
 data_str = dict()
@@ -24,7 +24,7 @@ for filename in os.scandir(folder):
         json.dump(parsed_data, file_out, ensure_ascii=False, indent=2)
     data_str[leaf] = dict()
     if "nve" not in parsed_data:
-        print(filename.path)
+        print(f"File without nve: {filename.path}")
         continue
     for pair in parsed_data["nve"]:
         if "vni" in pair:
@@ -50,12 +50,12 @@ for filename in os.scandir(folder):
         if "vrf" not in data_str[leaf][vni]:
             data_str[leaf][vni]["vrf"] = "None"
 
-
-with open("ds1.json", "w", encoding="UTF-8") as file_out:
-    json.dump(data_str, file_out, ensure_ascii=False, indent=2)
+# writing first data structure to file (optional)
+# with open("ds1.json", "w", encoding="UTF-8") as file_out:
+#     json.dump(data_str, file_out, ensure_ascii=False, indent=2)
 
 # obtaining second data structure
-data_str2 =dict()
+data_str2 = dict()
 temp_config = dict() #dict of all "config-device" pairs with dupplicates
 
 for leaf in data_str:
@@ -88,7 +88,7 @@ for vni in temp_config:
 
 for vni in data_str2:
     if len(data_str2[vni]) > 1:
-        print(vni)
+        print(f"Vni with more than one configuration: {vni}")
 # with open("temp.json", "w", encoding="UTF-8") as file_out:
 #     json.dump(temp_config, file_out, ensure_ascii=False, indent=2)
 with open("ds2.json", "w", encoding="UTF-8") as file_out:
